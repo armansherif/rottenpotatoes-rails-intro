@@ -12,6 +12,16 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+
+    #check for params passed by clicking title, in order to sort specified field
+    if (params[:sort_by] == "title")
+      @movies = Movie.order(:title)
+      @movie_click = "hilite"
+    elsif (params[:sort_by] == "release_date")
+      @movies = Movie.order(:release_date)
+      @date_click = "hilite"
+    end
+
   end
 
   def new
