@@ -25,7 +25,9 @@ class MoviesController < ApplicationController
       @date_click = "hilite"
     end
 
-   # if (params[:ratings])
+   if (params[:ratings])
+    @movies = @movies.select{|movie| params[:ratings].include? movie.rating}
+   end
 
   end
 
