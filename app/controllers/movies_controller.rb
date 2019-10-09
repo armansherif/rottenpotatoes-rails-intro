@@ -13,6 +13,9 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
 
+    @all_ratings = Movie.get_ratings
+
+
     #check for params passed by clicking title, in order to sort specified field
     if (params[:sort_by] == "title")
       @movies = Movie.order(:title)
@@ -21,6 +24,8 @@ class MoviesController < ApplicationController
       @movies = Movie.order(:release_date)
       @date_click = "hilite"
     end
+
+   # if (params[:ratings])
 
   end
 
