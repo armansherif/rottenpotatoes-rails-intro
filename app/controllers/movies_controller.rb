@@ -15,18 +15,33 @@ class MoviesController < ApplicationController
 
     @all_ratings = Movie.get_ratings
 
+    if (params[:ratings])
+      @ratings_filter = params[:ratings]
+      session[:ratings_filter] = @ratings_filter
+    end
+
+    if (params[:sort_by])
+      session[:sort_by] = params[:sort_by]
+    end
+
+    if (params[:ratings].nil? && params[:sort_by].nil? && session[:ratings_filter])
+      @sort_by = session[:sort_by]
+      @ratings_filter = session[:ratings_filter]
+      flash.keep
+      redirect_to movies_path({order_by: @sort_by, ratings: @ratings_filter})
+    end
 
     #check for params passed by clicking title, in order to sort specified field
-    if (params[:sort_by] == "title")
+    if (session[:sort_by] == "title")
       @movies = Movie.order(:title)
       @movie_click = "hilite"
-    elsif (params[:sort_by] == "release_date")
+    elsif (session[:sort_by] == "release_date")
       @movies = Movie.order(:release_date)
       @date_click = "hilite"
     end
 
-   if (params[:ratings])
-    @movies = @movies.select{|movie| params[:ratings].include? movie.rating}
+   if (session[:ratings_filter])
+    @movies = @movies.select{|movie| session[:ratings_filter].include? movie.rating}
    end
 
   end
